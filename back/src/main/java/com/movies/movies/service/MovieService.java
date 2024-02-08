@@ -14,4 +14,6 @@ public class MovieService {
     private MovieRepository repository;
 
     public Page<Movie> moviePage (Pageable pageable){ return repository.findAll(pageable);}
+
+    public Movie insertMovie (Movie movie){ return repository.save(movie);}
 }

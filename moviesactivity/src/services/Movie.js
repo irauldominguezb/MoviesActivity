@@ -20,4 +20,14 @@ const saveMovie = async (movie) =>{
     }
 }
 
-export default {getMovies, saveMovie}
+
+const changeStatus = async(idMovie) => {
+    try {
+        const response = await api.doDelete(`movie/${+idMovie}`)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export default {getMovies, saveMovie, changeStatus}

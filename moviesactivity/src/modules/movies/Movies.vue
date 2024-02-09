@@ -13,76 +13,70 @@
                         border-variant="white"
                         header-bg-variant="white"
                         header-text-variant="ssm"
+                        style="position: relative;"
                     >
                         <b-row>
-                            <b-col cols="12" class="mb-3">
+                            <b-col cols="12" class="mb-3" style="position: relative;">
                                 <b-row>
-                                    <b-col md="6" class="d-flex justify-content-between">
+                                    <b-col cols="12">
                                         <b-button variant="primary" @click="showSaveModal()" >
-                                            <b-icon icon="plus"></b-icon> <label class="">Agregar película</label>
+                                            <b-icon icon="plus"></b-icon> <label>Agregar película</label>
                                         </b-button>
                                     </b-col>
-                                    <b-col md="6" class="text-right">
-                                        <b-form-group label-for="search">
-                                            <b-input-group>
-                                                <b-form-input
-                                                    id="search"
-                                                    type="search"
-                                                    placeholder="Buscar..."
-                                                ></b-form-input>
-                                                <b-input-group-append class="show-button-with-media-query">
-                                                    <b-button variant="primary">Limpiar</b-button>
-                                                </b-input-group-append>
-                                            </b-input-group>
-                                        </b-form-group>
-                                    </b-col>
                                 </b-row>
-                                <b-row>
-                                    <b-col cols="12" class="mt-2">
-                                        <hr>
-                                    </b-col>
-                                    <b-col cols="12" md="6" lg="4" class="mt-2" v-for="(movie, index) in movies" :key="index">
-                                        <div v-if="movies.length != 0">
-                                            <b-card header-bg-variant="primary" bg-variant="white" text-variant="white" class="hover">
-                                                <template #header>
-                                                    <b-row>
-                                                        <b-col cols="12" md="6" lg="6" class="d-flex justify-content-start">
-                                                            <b class="mt-1">{{ movie.name }}</b>
-                                                        </b-col>
-                                                        <b-col cols="12" md="6" lg="6" class="d-flex justify-content-end">
-                                                            <b-button variant="white">
-                                                                <b-icon icon="x" bg-color="white" scale="1.5"></b-icon>
-                                                            </b-button>
-                                                        </b-col>
-                                                    </b-row>
-                                                </template>
-                                                <b-card-text>
-                                                    <b-row>
-                                                        <b-col cols="12" class="text-black">
-                                                            <b>Director:</b> <label>{{ movie.director }}</label>
-                                                        </b-col>
-                                                        <b-col class="text-black"  cols="12">
-                                                            <b>Duration:</b> {{ movie.duration }}
-                                                        </b-col>
-                                                        <b-col class="text-black" cols="12">
-                                                            <b>Genre:</b> {{ movie.gender.name }}
-                                                        </b-col>
-                                                    </b-row>
-                                                </b-card-text>
-                                            </b-card>
+                                <b-row style="position: relative;">
+                                    <loading-componet v-if="isloading"/>
+                                    <template v-if="!isloading">
+                                        <b-col cols="12" class="mt-2">
+                                            <hr>
+                                        </b-col>
+                                        <b-col cols="12" md="6" lg="4" class="mt-2" v-for="(movie, index) in movies" :key="index">
+                                            <div v-if="movies.length != 0">
+                                                <b-card header-bg-variant="primary" bg-variant="white" text-variant="white" class="hover card-style">
+                                                    <template #header>
+                                                        <b-row>
+                                                            <b-col cols="12" md="6" lg="6" class="d-flex justify-content-start">
+                                                                <b class="mt-1">{{ movie.name }}</b>
+                                                            </b-col>
+                                                            <b-col cols="12" md="6" lg="6" class="d-flex justify-content-end">
+                                                                <b-button variant="white" @click="changeStatus(movie.id)">
+                                                                    <b-icon class="delete-button" icon="x" style="color: white;" scale="1.5"></b-icon>
+                                                                </b-button>
+                                                            </b-col>
+                                                        </b-row>
+                                                    </template>
+                                                    <b-card-text>
+                                                        <b-row>
+                                                            <b-col cols="12" class="text-black">
+                                                                <b>Director:</b> <label>{{ movie.director }}</label>
+                                                            </b-col>
+                                                            <b-col class="text-black"  cols="12">
+                                                                <b>Duration:</b> {{ movie.duration }}
+                                                            </b-col>
+                                                            <b-col class="text-black" cols="12">
+                                                                <b>Genre:</b> {{ movie.gender.name }}
+                                                            </b-col>
+                                                            <b-col class="text-black" cols="12">
+                                                                <b>Availability: </b> 
+                                                                <b-badge :class="movie.available ? 'success' : 'danger'">{{ movie.available ? 'Disponible' : 'No disponible' }}</b-badge>
+                                                            </b-col>
+                                                        </b-row>
+                                                    </b-card-text>
+                                                </b-card>
+                                            </div>
+                                        </b-col>
+                                        <div v-show="movies.length === 0">
+                                            <b-row>
+                                                <b-col cols="12" class="d-flex justify-content-center">
+                                                    <b-alert show variant="primary">
+                                                        No hay películas registradas
+                                                    </b-alert>
+                                                </b-col>
+                                            </b-row>
                                         </div>
-                                    </b-col>
-                                    <div v-show="movies.length === 0">
-                                        <b-row>
-                                            <b-col cols="12" class="d-flex justify-content-center">
-                                                <b-alert show variant="primary">
-                                                    No hay películas registradas
-                                                </b-alert>
-                                            </b-col>
-                                        </b-row>
-                                    </div>
+                                    </template>
                                 </b-row>
-                                <b-row>
+                                <b-row v-if="!isloading">
                                     <b-col cols="12" class="mt-4 ">
                                         <b-row>
                                             <b-col cols ="6" md="4" class="align-self-center">
@@ -127,15 +121,14 @@
                                                     size="md"
                                                 ></b-pagination>
                                             </b-col>
-                                        </b-row>
-                                    </b-col>
+                                        </b-row> </b-col>
                                 </b-row>
                             </b-col>
                         </b-row>
                     </b-card-body>
                 </b-card>
                 <SaveMovieVue
-                    :getMovies="getMovies"
+                    @getMovies="getMovies()"
                 />
             </b-col>
         </b-row>
@@ -145,18 +138,22 @@
 <script>
 import SaveMovieVue from './SaveMovie.vue'
 import movieServices from '../../services/Movie'
+import Loading from '@/components/Loading.vue'
 
 export default {
     components: {
-        SaveMovieVue
+        SaveMovieVue,
+        'loading-componet': Loading
     },
+   
     name: 'MoviesPage',
     data(){
         return {
             movies :[],
             currentPage: 1,
             perPage: 5,
-            rows: 0
+            rows: 0,
+            isloading: true
         }
     },
     methods: {
@@ -164,22 +161,51 @@ export default {
             this.$bvModal.show("modal-save-movie");
         },
         async getMovies(){
+            this.isloading = true
             try {
                 const pagination = {
                     size: this.perPage,
                     page: (this.currentPage-1)
                 }
-                const {status,data ,data: {content, totalElements} } = await movieServices.getMovies(pagination)
+                const {status, data: {content, totalElements} } = await movieServices.getMovies(pagination)
                 if(status === 200){
-                    console.log("data",data)
-                    console.log("content",content)
                     this.movies = content
-                    console.log("totalElements",totalElements)
                     this.rows = totalElements
                 }
             } catch (error) {
                 console.log("error",error)
             }
+            this.isloading = false
+        },
+        changeStatus(id){
+            this.$swal.fire({
+                icon: "warning",
+                title: "¿Estás seguro que deseas deshabilitar esta película?",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#007bff",
+                cancelButtonColor: "#6c757d"
+            }).then(async (result) => {
+                if(result.isConfirmed){
+                    try {
+                        const {status} = await movieServices.changeStatus(id)
+                        if(status === 200){
+                            this.$swal.fire({
+                                title: `Estado de la película actualizado correctamente`, 
+                                icon: "success",
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                                timer: 3000
+                            }).then((res) => {
+                                this.getMovies()
+                            })
+                        }
+                    } catch (error) {
+                        console.log("error",error)
+                    }
+                }
+            })
         }
     },
     mounted(){
@@ -191,7 +217,6 @@ export default {
 
 <style scoped>
 .hover:hover{
-    cursor: pointer;
     box-shadow: 2px -2px 58px 15px rgba(196,188,196,0.6);;
 }
 
@@ -217,6 +242,30 @@ export default {
     }
 }
 
+.success{
+    background-color: #28a745;
+    color: white;
+}
+.danger{
+    background-color: #dc3545;
+    color: white;
+}
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.card-style{
+    animation: fadeIn 0.5s ease-in-out;
+    height: 210px;
+}
+.delete-button:hover{
+    color: black;
+}
 
 </style>

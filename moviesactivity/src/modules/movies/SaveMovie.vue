@@ -151,8 +151,8 @@ export default {
                                 showConfirmButton: false,
                                 timer: 3000
                             });
+                            this.$emit("getMovies");
                             this.closeModalSave();
-                            this.$root.$emit("getMovies");
                         }
                     } catch (error) {
                         console.error(error);

@@ -22,4 +22,9 @@ public class MovieController {
     Movie insertMovie(@RequestBody( required = true) Movie movie){
         return service.insertMovie(movie);
     }
+
+    @DeleteMapping("/{id}")
+    boolean changeStatus(@PathVariable(name = "id") Long id){
+        return service.changeStatus(id);
+    }
 }

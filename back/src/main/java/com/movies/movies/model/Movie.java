@@ -20,6 +20,8 @@ public class Movie {
     private String duration;
     @Column
     private String director;
+    @Column
+    private boolean available = true;
 
     @ManyToOne
     @JoinColumn(name = "gender_id", nullable = false)

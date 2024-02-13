@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -20,6 +22,8 @@ public class Movie {
     private String duration;
     @Column
     private String director;
+    @Column
+    private Date publication;
     @Column
     private boolean available = true;
 

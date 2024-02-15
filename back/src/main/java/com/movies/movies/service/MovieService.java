@@ -51,4 +51,14 @@ public class MovieService {
         }
         return true;
     }
+
+    @Transactional
+    public boolean deleteMovie(Long id){
+        try{
+            repository.deleteById(id);
+        }catch (Exception ex){
+            return false;
+        }
+        return true;
+    }
 }

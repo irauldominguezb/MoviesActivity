@@ -57,4 +57,9 @@ public class MovieController {
     boolean changeStatus(@PathVariable(name = "id") Long id){
         return service.changeStatus(id);
     }
+
+    @DeleteMapping("/delete/{id}")
+    boolean deleteMovie(@PathVariable(name = "id") Long id){
+        return service.deleteMovie(id);
+    }
 }

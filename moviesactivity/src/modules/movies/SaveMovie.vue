@@ -56,7 +56,7 @@
         </b-col>
     </b-row>
     <b-row>
-        <b-col cols="12">
+        <b-col cols="12" class="mb-1">
             <b-form-group
                 id="fieldset-movie-genre"
                 label-for="input-movie-genre"
@@ -76,6 +76,24 @@
                 </multiselect>
             </b-form-group>
         </b-col>
+        <b-col cols="12" class="mb-1">
+            <b-form-group
+                id="fieldset-movie-publication"
+                label-for="input-movie-publication"
+                invalid-feedback="Por favor selecciona una fecha de lanzamiento válida."
+            >
+                <label class="mandatory-field">Lanzamiento: </label>
+                <b-form-input
+                    class="text-secondary"
+                    type="date"
+                    v-model="v$.movie.publication.$model"
+                    :state="v$.movie.publication.$dirty ? !v$.movie.publication.$error : null"
+                    label="input-movie-duration"
+                    :max="getDate()"
+                >
+                </b-form-input>
+            </b-form-group>
+        </b-col>
     </b-row>
     <template slot="modal-footer">
         <b-row>
@@ -92,7 +110,7 @@
                 <b-button 
                     @click="saveMovie()" 
                     variant="primary"
-                    :disabled="v$.movie.name.$invalid || v$.movie.director.$invalid || v$.movie.duration.$invalid || v$.selected.$invalid"
+                    :disabled="v$.movie.name.$invalid || v$.movie.director.$invalid || v$.movie.duration.$invalid || v$.selected.$invalid || v$.movie.publication.$invalid"
                 >
                     Registrar
                 </b-button>
@@ -121,7 +139,8 @@ export default {
                 duration: "",
                 gender: {
                     id: 0
-                }
+                },
+                publication: ""
             },
             genres: [],
             selected: null
@@ -136,7 +155,7 @@ export default {
                 confirmButtonText: "Aceptar",
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: "#007bff",
-                cancelButtonColor: "#6c757d"
+                cancelButtonColor: "#6c757d",
             }).then(async (result) => {
                 if(result.isConfirmed){
                     try {
@@ -167,7 +186,8 @@ export default {
                 title: "",
                 director: "",
                 duration: "",
-                genre: ""
+                genre: "",
+                publication: ""
             }
         },
         async getGenres(){
@@ -179,6 +199,9 @@ export default {
             } catch (error) {
                 console.error(error);
             }
+        },
+        getDate(){
+            return new Date().toISOString().split('T')[0];
         }
     },
     validations: {
@@ -205,6 +228,9 @@ export default {
                     return format;
                 }
             },
+            publication: {
+                required
+            }
         },
         selected: {
             required

@@ -11,13 +11,14 @@ import router from './router';
 import VueRouter from 'vue-router'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
-
+import VueMoment from 'vue-moment'
 Vue.use(VueRouter)
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(VueMoment)
 /* eslint-disable */
 Vue.component('Multiselect', Multiselect)
 new Vue({

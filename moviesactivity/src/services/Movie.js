@@ -30,4 +30,60 @@ const changeStatus = async(idMovie) => {
     }
 }
 
-export default {getMovies, saveMovie, changeStatus}
+const getMoviesByName = async (name) =>{
+    try {
+        const response = await api.doGet(`movie/page/name/${name}`)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const getMoviesByDirector = async (name) => {
+    try {
+        const response = await api.doGet(`movie/page/director/${name}`)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const getMoviesByGender = async (name) => {
+    try {
+        const response = await api.doGet(`movie/page/gender/${name}`)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+const getMoviesByRealeaseDate = async (date) => {
+    try {
+        const response = await api.doGet(`movie/page`, {start:date})
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const deleteMovie = async (id) => {
+    try {
+        const response = await api.doDelete(`movie/${id}`)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+
+}
+
+export default {
+    getMovies, 
+    saveMovie, 
+    changeStatus, 
+    getMoviesByName, 
+    getMoviesByDirector, 
+    getMoviesByGender, 
+    getMoviesByRealeaseDate,
+    deleteMovie
+}

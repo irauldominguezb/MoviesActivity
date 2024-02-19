@@ -18,6 +18,11 @@
                 <b-row>
                     <b-col cols="12" class="mb-3" style="position: relative;">
                         <b-row>
+                            <b-col>
+                                <SearchComponent v-if="showElement"/>
+                            </b-col>
+                        </b-row>
+                        <b-row>
                             <b-col cols="6">
                                 <b-button class="m-1" variant="primary" @click="showSaveModal()">
                                     <b-icon icon="plus"></b-icon> Agregar
@@ -38,22 +43,22 @@
                             <b-col cols="6">
                                 <div>
                                     <b-input-group>
-                                    <b-form-input
-                                        id="search"
-                                        pill
-                                        :placeholder="'Buscar por ' + `${placehoderFilter}` + '...'"
-                                        style="border: thin 0.4px gray;"
-                                        v-model="search"
-                                        @input="filter(search)"
-                                    >
-                                    </b-form-input>
-                                    <template #append>
-                                        <b-dropdown variant="primary" text style="">
-                                            <b-dropdown-item @click="() => getFilter('name')">Nombre</b-dropdown-item>
-                                            <b-dropdown-item @click= "() => getFilter('director')">Director</b-dropdown-item>
-                                            <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
-                                        </b-dropdown>
-                                    </template>
+                                        <b-form-input
+                                            id="search"
+                                            pill
+                                            :placeholder="'Buscar por ' + `${placehoderFilter}` + '...'"
+                                            style="border: thin 0.4px gray;"
+                                            v-model="search"
+                                            @input="filter(search)"
+                                        >
+                                        </b-form-input>
+                                        <template #append>
+                                            <b-dropdown variant="primary" text style="">
+                                                <b-dropdown-item @click="() => getFilter('name')">Nombre</b-dropdown-item>
+                                                <b-dropdown-item @click= "() => getFilter('director')">Director</b-dropdown-item>
+                                                <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
+                                            </b-dropdown>
+                                        </template>
                                     </b-input-group>
                                 </div>
                             </b-col>
@@ -199,12 +204,14 @@ import Loading from '@/components/Loading.vue'
 import DeleteComponent from '../DeleteComponent.vue'
 import FilterDates from './FilterDates.vue'
 import moment from 'moment'
+import SearchComponent from './SearchComponent.vue'
 export default {
     components: {
         SaveMovieVue,
         'loading-componet': Loading,
         DeleteComponent,
         FilterDates,
+        SearchComponent
     },
    
     name: 'MoviesPage',
@@ -220,7 +227,9 @@ export default {
             search: '',
             onDrag: false,
             showSearch: false,
-            searchType: ''
+            searchType: '',
+            lastScrollPosition: 0,
+            showElement: true
         }
     },
     methods: {
@@ -384,10 +393,27 @@ export default {
         },
         hideLoading(){
             this.isloading = false
-        }
+        },
+        onScroll() {
+            // Obtiene la posición actual del scroll
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            console.log("=>",currentScrollPosition);
+            if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
+            return;
+            }
+            // aqui determinamos si la posición es mayor a la posición anterior. Entonces, si lo es, mostramos el elemento.
+            this.showElement = currentScrollPosition > 100;
+            console.log("=>",this.showElement);
+            //  
+            this.lastScrollPosition = currentScrollPosition;
+        },
+    },
+    beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
     },
     mounted(){
         this.getMovies()
+        window.addEventListener("scroll", this.onScroll);
     }
     
 }
@@ -395,15 +421,6 @@ export default {
 
 <style scoped>
 
-
-.sticky{
-    position: fixed;
-    top: 100px;
-    right:170px;
-    width: 80%;
-    background-color: #ffffff;
-    z-index: 1000;
-}
 
 .hover:hover{
     box-shadow: 2px -2px 58px 15px #c4bcc499;

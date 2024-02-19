@@ -1,7 +1,7 @@
 <template>
   <b-modal id="modal-save-movie" no-close-on-backdrop centered no-close-on-esc size="md">
     <template v-slot:modal-header="{}">
-        <h5>Agregar nueva película</h5>
+        <h5>Nueva película</h5>
     </template>
     <b-row>
         <b-col cols="12" class="mb-1">

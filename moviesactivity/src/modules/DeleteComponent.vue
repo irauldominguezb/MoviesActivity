@@ -48,7 +48,7 @@ export default {
                     const {status} = await movieService.deleteMovie(itemID)
                     if (status === 200) {
                         this.$swal.fire({
-                            title: "Eliminación exitosa!",
+                            title: "¡Eliminación exitosa!",
                             icon: "success",
                             showCancelButton: false,
                             showConfirmButton: false,

@@ -31,6 +31,17 @@
 import movieService from "@/services/Movie"
 export default {
     name: 'DeleteComponent',
+    props:{
+        onDrag:{
+            type: Boolean,
+            required: true
+        }
+    },
+    data(){
+        return{
+            isMounted: false
+        }
+    },
     methods:{
         onDrop(evt) {
             const itemID = evt.dataTransfer.getData("movieId")
@@ -64,8 +75,34 @@ export default {
             const indexCard = evt.dataTransfer.getData("indexCard");
             document.getElementsByClassName('card-style')[indexCard].style['z-index'] = 1
             this.$emit('showOverlay')
-            
+        },
+        showInfo(){
+            console.log("hola")
+            const Toast = this.$swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = this.$swal.stopTimer;
+                    toast.onmouseleave = this.$swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Signed in successfully"
+            });
+
         }
+    },
+    watch:{
+        onDrag(oldValue, newValue){
+             
+        }
+    },
+    mounted(){
+        this.showInfo()
     }
 }
 </script>

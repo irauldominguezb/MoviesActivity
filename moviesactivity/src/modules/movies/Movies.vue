@@ -1,6 +1,6 @@
 <template>
     <div>
-       <DeleteComponent v-show="onDrag" @showOverlay="showOverlay" @getMovies="getMovies"/>
+       <DeleteComponent v-show="onDrag" @showOverlay="showOverlay" @getMovies="getMovies" :onDrag="onDrag"/>
        <div class="container pt-3 pb-3">
         <b-card class="shadow-lg">
             <template slot="header" >
@@ -17,11 +17,6 @@
             >
                 <b-row>
                     <b-col cols="12" class="mb-3" style="position: relative;">
-                        <b-row>
-                            <b-col>
-                                <SearchComponent v-if="showElement"/>
-                            </b-col>
-                        </b-row>
                         <b-row>
                             <b-col cols="6">
                                 <b-button class="m-1" variant="primary" @click="showSaveModal()">
@@ -204,14 +199,12 @@ import Loading from '@/components/Loading.vue'
 import DeleteComponent from '../DeleteComponent.vue'
 import FilterDates from './FilterDates.vue'
 import moment from 'moment'
-import SearchComponent from './SearchComponent.vue'
 export default {
     components: {
         SaveMovieVue,
         'loading-componet': Loading,
         DeleteComponent,
         FilterDates,
-        SearchComponent
     },
    
     name: 'MoviesPage',
@@ -394,26 +387,9 @@ export default {
         hideLoading(){
             this.isloading = false
         },
-        onScroll() {
-            // Obtiene la posición actual del scroll
-            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-            console.log("=>",currentScrollPosition);
-            if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
-            return;
-            }
-            // aqui determinamos si la posición es mayor a la posición anterior. Entonces, si lo es, mostramos el elemento.
-            this.showElement = currentScrollPosition > 100;
-            console.log("=>",this.showElement);
-            //  
-            this.lastScrollPosition = currentScrollPosition;
-        },
-    },
-    beforeDestroy() {
-    window.removeEventListener("scroll", this.onScroll);
     },
     mounted(){
-        this.getMovies()
-        window.addEventListener("scroll", this.onScroll);
+        this.getMovies() 
     }
     
 }

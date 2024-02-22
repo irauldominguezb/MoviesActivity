@@ -97,6 +97,7 @@ export default {
         }
     },
     watch:{
+      // eslint-disable-next-line no-unused-vars
         onDrag(oldValue, newValue){
              
         }

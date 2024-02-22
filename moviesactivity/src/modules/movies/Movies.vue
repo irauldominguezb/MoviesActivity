@@ -17,47 +17,49 @@
             >
                 <b-row>
                     <b-col cols="12" class="mb-3" style="position: relative;">
-                        <b-row>
-                            <b-col cols="6">
-                                <b-button class="m-1" variant="primary" @click="showSaveModal()">
-                                    <b-icon icon="plus"></b-icon> Agregar
-                                </b-button>
-                                <b-dropdown variant="primary">
-                                    <template #button-content>
-                                        <b-icon icon="funnel" aria-hidden="true"></b-icon> Filtrar por
-                                    </template>
-                                    <b-dropdown-item-button @click="showComponent('specific')">
-                                        Fecha específica de publicación
-                                    </b-dropdown-item-button>
-                                    <b-dropdown-divider></b-dropdown-divider>
-                                    <b-dropdown-item-button @click="showComponent('range')">
-                                        Rango de fechas
-                                    </b-dropdown-item-button>
-                                </b-dropdown>
-                            </b-col>
-                            <b-col cols="6">
-                                <div>
-                                    <b-input-group>
-                                        <b-form-input
-                                            id="search"
-                                            pill
-                                            :placeholder="'Buscar por ' + `${placehoderFilter}` + '...'"
-                                            style="border: thin 0.4px gray;"
-                                            v-model="search"
-                                            @input="filter(search)"
-                                        >
-                                        </b-form-input>
-                                        <template #append>
-                                            <b-dropdown variant="primary" text style="">
-                                                <b-dropdown-item @click="() => getFilter('name')">Nombre</b-dropdown-item>
-                                                <b-dropdown-item @click= "() => getFilter('director')">Director</b-dropdown-item>
-                                                <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
-                                            </b-dropdown>
-                                        </template>
-                                    </b-input-group>
-                                </div>
-                            </b-col>
-                        </b-row>
+                      <div style="height: 60px;">
+                          <b-row class="header-search" :class="{'header-search-sticky': !showElement}">
+                              <b-col cols="6">
+                                  <b-button class="m-1" variant="primary" @click="showSaveModal()">
+                                      <b-icon icon="plus"></b-icon> Agregar
+                                  </b-button>
+                                  <b-dropdown variant="primary">
+                                      <template #button-content>
+                                          <b-icon icon="funnel" aria-hidden="true"></b-icon> Filtrar por
+                                      </template>
+                                      <b-dropdown-item-button @click="showComponent('specific')">
+                                          Fecha específica de publicación
+                                      </b-dropdown-item-button>
+                                      <b-dropdown-divider></b-dropdown-divider>
+                                      <b-dropdown-item-button @click="showComponent('range')">
+                                          Rango de fechas
+                                      </b-dropdown-item-button>
+                                  </b-dropdown>
+                              </b-col>
+                              <b-col cols="6">
+                                  <div>
+                                      <b-input-group>
+                                          <b-form-input
+                                              id="search"
+                                              pill
+                                              :placeholder="'Buscar por ' + `${placehoderFilter}` + '...'"
+                                              style="border: thin 0.4px gray;"
+                                              v-model="search"
+                                              @input="filter(search)"
+                                          >
+                                          </b-form-input>
+                                          <template #append>
+                                              <b-dropdown variant="primary" text style="">
+                                                  <b-dropdown-item @click="() => getFilter('name')">Nombre</b-dropdown-item>
+                                                  <b-dropdown-item @click= "() => getFilter('director')">Director</b-dropdown-item>
+                                                  <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
+                                              </b-dropdown>
+                                          </template>
+                                      </b-input-group>
+                                  </div>
+                              </b-col>
+                          </b-row>
+                        </div>
                         <b-row>
                             <b-col>
                                 <FilterDates 
@@ -77,7 +79,7 @@
                                 <b-col cols="12" class="mt-2">
                                     <hr>
                                 </b-col>
-                                <b-col cols="12" md="6" lg="4" class="mt-2" v-for="(movie, index) in movies" :key="index">
+                                <b-col cols="12" md="6" lg="4" class="mt-2 scroll-content" v-for="(movie, index) in movies" :key="index">
                                     <div v-if="movies.length != 0">
                                         <b-card pill draggable @dragstart="drag($event, movie, index)" bg-variant="white" text-variant="black" class="hover card-style mb-2">
                                             <template #header>
@@ -387,9 +389,20 @@ export default {
         hideLoading(){
             this.isloading = false
         },
+
+        onScroll() {
+          const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+          if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
+            return;
+          }
+          this.showElement = currentScrollPosition < this.lastScrollPosition;
+          this.lastScrollPosition = currentScrollPosition;
+        },
     },
     mounted(){
-        this.getMovies() 
+        this.getMovies()
+        document.addEventListener('scroll', this.onScroll)
     }
     
 }
@@ -401,6 +414,11 @@ export default {
 .hover:hover{
     box-shadow: 2px -2px 58px 15px #c4bcc499;
     transition: 0.5s;
+    cursor: grab;
+}
+
+.hover:active{
+  cursor: grabbing;
 }
 
 .show-button-with-media-query {
@@ -449,6 +467,42 @@ export default {
 }
 .delete-button:hover{
     color: black;
+}
+
+.scroll-content{
+  height: 80vh;
+}
+
+.header-search{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  transition: all ease 0.5s;
+}
+
+.header-search-sticky{
+  background-color: rgba(0,0,0,0.1);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  position: fixed;
+  top: 50px;
+  z-index: 200;
+  width: 82%;
+  border-radius: 5px;
+  animation-name: appear;
+  animation-duration: 1s;
+}
+
+@keyframes appear {
+  from{
+    opacity: 0;
+    top: 0;
+  }
+  to {
+    opacity: 1;
+    top: 50px;
+  }
 }
 
 </style>

@@ -72,6 +72,7 @@ const getMoviesByRealeaseDate = async (date) => {
 const deleteMovie = async (id) => {
     try {
         const response = await api.doDelete(`movie/delete/${id}`)
+        
         return response
     } catch (error) {
         throw new Error(error)
@@ -81,8 +82,8 @@ const deleteMovie = async (id) => {
 
 const getMovieById = async (id) => {
     try {
-        const response = await api.doPost(`movie/delete/${id}`)
-        return response
+        const {status, data:{data}} = await api.doGet(`movie/${id}`)
+        return {status, data}
     } catch (error) {
         throw new Error(error)
     }

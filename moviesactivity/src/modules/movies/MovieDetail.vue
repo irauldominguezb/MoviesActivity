@@ -8,7 +8,7 @@
                     <b-row class="pt-1">
                         <b-col lg="12">
                             <h5 class="text-secondary text-center">
-                                Detalle de película
+                                {{ foundMovie.name }}
                             </h5>
                         </b-col>
                     </b-row>
@@ -27,25 +27,25 @@
                 </b-row>
                 <div class="container pt-3">
                     <b-row>
-                        <b-col cols="12" lg="8">
+                        <b-col cols="12" lg="8" v-if="foundMovie.id">
                             <b-row>
                                 <b-col cols="12" class="mt-2 d-flex justify-content-between">
                                     <h5>
-                                Director: <span class="text-secondary">Nombre del director</span>
+                                Director: <span class="text-secondary">{{foundMovie.director}}</span>
                                     </h5>
                                 </b-col>
                             </b-row>
                             <b-row>
                                 <b-col cols="12" class="mt-2">
                                     <h5>
-                                Año: <span class="text-secondary">Año de estreno</span>
+                                Publicación: <span class="text-secondary">{{foundMovie.publication.split('T')[0]}}</span>
                                     </h5>
                                 </b-col>
                             </b-row>
                             <b-row>
                                 <b-col cols="12" class="mt-2">
                                     <h5>
-                                Género: <span class="text-secondary">Género</span>
+                                Género: <span class="text-secondary">{{foundMovie.gender.name}}</span>
                                     </h5>
                                 </b-col>
                             </b-row>
@@ -67,8 +67,26 @@
 </template>
 
 <script>
+import services from "@/services/Movie"
 export default {
     name: 'MovieDetail',
+    data(){
+        return{
+            foundMovie:{}
+        }
+    },
+    methods: {
+        async getMovieById(){
+            const id = this.$route.params.id
+            const {status, data} = await services.getMovieById(id)
+            if(status === 200){
+                this.foundMovie = data
+            }
+        }
+    },
+    mounted(){
+        this.getMovieById()
+    }
 }
 </script>
 

@@ -77,7 +77,6 @@ export default {
             this.$emit('showOverlay')
         },
         showInfo(){
-            console.log("hola")
             const Toast = this.$swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -95,6 +94,8 @@ export default {
             });
 
         }
+<<<<<<< HEAD
+=======
     },
     watch:{
       // eslint-disable-next-line no-unused-vars
@@ -104,6 +105,7 @@ export default {
     },
     mounted(){
         this.showInfo()
+>>>>>>> 9c104d9f74d715291c2867ee0cdbe89604904b97
     }
 }
 </script>

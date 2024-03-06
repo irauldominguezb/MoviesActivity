@@ -13,10 +13,53 @@
                 border-variant="white"
                 header-bg-variant="white"
                 header-text-variant="ssm"
-                style="position: relative;"
+                style="position: relative;" 
             >
                 <b-row>
                     <b-col cols="12" class="mb-3" style="position: relative;">
+<<<<<<< HEAD
+                        <b-row>
+                            <b-col cols="6">
+                                <b-button class="m-1" variant="primary" @click="showSaveModal()">
+                                    <b-icon icon="plus"></b-icon> Agregar
+                                </b-button>
+                                <b-dropdown variant="primary">
+                                    <template #button-content>
+                                        <b-icon icon="funnel" aria-hidden="true"></b-icon> Filtrar por
+                                    </template>
+                                    <b-dropdown-item-button @click="showComponent('specific')">
+                                        Fecha específica de publicación
+                                    </b-dropdown-item-button>
+                                    <b-dropdown-divider></b-dropdown-divider>
+                                    <b-dropdown-item-button @click="showComponent('range')">
+                                        Rango de fechas
+                                    </b-dropdown-item-button>
+                                </b-dropdown>
+                            </b-col>
+                            <b-col cols="6">
+                                <div>
+                                    <b-input-group>
+                                        <b-form-input
+                                            id="search"
+                                            pill
+                                            :placeholder="'Buscar por ' + `${placehoderFilter}` + '...'"
+                                            style="border: thin 0.4px gray;"
+                                            v-model="search"
+                                            @input="filter(search)"
+                                        >
+                                        </b-form-input>
+                                        <template #append>
+                                            <b-dropdown variant="primary" text style="">
+                                                <b-dropdown-item @click="() => getFilter('name')">Nombre</b-dropdown-item>
+                                                <b-dropdown-item @click= "() => getFilter('director')">Director</b-dropdown-item>
+                                                <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
+                                            </b-dropdown>
+                                        </template>
+                                    </b-input-group>    
+                                </div>
+                            </b-col>
+                        </b-row>
+=======
                       <div style="height: 60px;">
                           <b-row class="header-search" :class="{'header-search-sticky': !showElement}">
                               <b-col cols="6">
@@ -60,6 +103,7 @@
                               </b-col>
                           </b-row>
                         </div>
+>>>>>>> 9c104d9f74d715291c2867ee0cdbe89604904b97
                         <b-row>
                             <b-col>
                                 <FilterDates 
@@ -81,7 +125,7 @@
                                 </b-col>
                                 <b-col cols="12" md="6" lg="4" class="mt-2 scroll-content" v-for="(movie, index) in movies" :key="index">
                                     <div v-if="movies.length != 0">
-                                        <b-card pill draggable @dragstart="drag($event, movie, index)" bg-variant="white" text-variant="black" class="hover card-style mb-2">
+                                        <b-card pill draggable @dragstart="drag($event, movie, index)" bg-variant="white" text-variant="black" class="hover card-style mb-2" @click="Detail(movie.id)">
                                             <template #header>
                                                 <b-row>
                                                     <b-col cols="12" class="d-flex text-truncate mt-1 justify-content-between align-items-center">
@@ -106,9 +150,6 @@
                                                     <b-col class="text-black mb-1 d-flex justify-content-between align-items-center" cols="12">
                                                         <b class="text-secondary">Availability: </b> 
                                                         <b-badge :class="movie.available ? 'success' : 'danger'">{{ movie.available ? 'Disponible' : 'No disponible' }}</b-badge>
-                                                    </b-col>
-                                                    <b-col class="text-black mb-1 d-flex justify-content-between align-items-center" cols="12">
-                                                        <b class="text-secondary">Release: </b>{{ movie.publication ? dateFormated(movie.publication) : 'Sin fecha'}}
                                                     </b-col>
                                                 </b-row>
                                             </b-card-text>
@@ -201,6 +242,7 @@ import Loading from '@/components/Loading.vue'
 import DeleteComponent from '../DeleteComponent.vue'
 import FilterDates from './FilterDates.vue'
 import moment from 'moment'
+import {encrypt} from "../../config/utils"
 export default {
     components: {
         SaveMovieVue,
@@ -228,6 +270,12 @@ export default {
         }
     },
     methods: {
+        async Detail(id) {
+            let code = await encrypt(id.toString())
+            this.$router.push({
+                path:`/movieDetail/${encodeURIComponent(code)}`
+            });
+        },
         showSaveModal(){
             this.$bvModal.show("modal-save-movie");
         },
@@ -334,11 +382,13 @@ export default {
                     size: this.perPage,
                     page: (this.currentPage-1)
                 }
-                const {status, data: {content, totalElements} } = await movieServices.getMovies(pagination)
+                const {status, data:{content, totalItems}} = await movieServices.getMovies(pagination)
                 if(status === 200){
                     this.movies = content
-                    this.rows = totalElements
+                    this.rows = totalItems
                 }
+/*                 const pageableObject = JSON.parse(response)
+                console.log("pageableObject>",pageableObject)  */
             } catch (error) {
                 console.log("error",error)
             }

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+import  api from "../config/http-client.gateway"
+//import {decrypt} from "@/config/utils"
+=======
 import api from "../config/http-client.gateway"
 const forge = require('node-forge')
+>>>>>>> 9c104d9f74d715291c2867ee0cdbe89604904b97
 
 const getMovies = async (pagination)=> {
     try {

@@ -40,6 +40,11 @@ public class MovieService {
         return repository.findMoviesByPublicationOrderByPublicationDesc(publication, pageable);
     }
 
+    public Optional<Movie> getById (Long id){
+        return repository.findById(id);
+    }
+
+    @Transactional
     public Movie insertMovie (DtoMovie movie){
         Movie mov = new Movie();
         mov.setDataMovie(movie);

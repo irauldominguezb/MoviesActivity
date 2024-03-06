@@ -14,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -112,6 +109,18 @@ public class MovieController {
             return new ResponseApi<>(null, HttpStatus.BAD_REQUEST, true, "malformed request");
         } catch (Exception ex) {
             return new ResponseApi<>(null, HttpStatus.BAD_REQUEST, true, "failed crypt service");
+        }
+    }
+
+    @GetMapping("/{id}")
+    ResponseApi<?> getById(@PathVariable(name = "id") String idC){
+        try{
+            String id = cryptService.decrypt(idC);
+            Optional<Movie> result = service.getById(Long.valueOf(id));
+            return new ResponseApi<>(result, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
         }
     }
 

@@ -13,7 +13,7 @@
                 border-variant="white"
                 header-bg-variant="white"
                 header-text-variant="ssm"
-                style="position: relative;"
+                style="position: relative;" 
             >
                 <b-row>
                     <b-col cols="12" class="mb-3" style="position: relative;">
@@ -54,7 +54,7 @@
                                                 <b-dropdown-item @click= "() => getFilter('gender')">Género</b-dropdown-item>
                                             </b-dropdown>
                                         </template>
-                                    </b-input-group>
+                                    </b-input-group>    
                                 </div>
                             </b-col>
                         </b-row>
@@ -79,7 +79,7 @@
                                 </b-col>
                                 <b-col cols="12" md="6" lg="4" class="mt-2" v-for="(movie, index) in movies" :key="index">
                                     <div v-if="movies.length != 0">
-                                        <b-card pill draggable @dragstart="drag($event, movie, index)" bg-variant="white" text-variant="black" class="hover card-style mb-2">
+                                        <b-card pill draggable @dragstart="drag($event, movie, index)" bg-variant="white" text-variant="black" class="hover card-style mb-2" @click="Detail(movie.id)">
                                             <template #header>
                                                 <b-row>
                                                     <b-col cols="12" class="d-flex text-truncate mt-1 justify-content-between align-items-center">
@@ -104,9 +104,6 @@
                                                     <b-col class="text-black mb-1 d-flex justify-content-between align-items-center" cols="12">
                                                         <b class="text-secondary">Availability: </b> 
                                                         <b-badge :class="movie.available ? 'success' : 'danger'">{{ movie.available ? 'Disponible' : 'No disponible' }}</b-badge>
-                                                    </b-col>
-                                                    <b-col class="text-black mb-1 d-flex justify-content-between align-items-center" cols="12">
-                                                        <b class="text-secondary">Release: </b>{{ movie.publication ? dateFormated(movie.publication) : 'Sin fecha'}}
                                                     </b-col>
                                                 </b-row>
                                             </b-card-text>
@@ -199,6 +196,7 @@ import Loading from '@/components/Loading.vue'
 import DeleteComponent from '../DeleteComponent.vue'
 import FilterDates from './FilterDates.vue'
 import moment from 'moment'
+import {encrypt} from "../../config/utils"
 export default {
     components: {
         SaveMovieVue,
@@ -226,6 +224,12 @@ export default {
         }
     },
     methods: {
+        async Detail(id) {
+            let code = await encrypt(id.toString())
+            this.$router.push({
+                path:`/movieDetail/${encodeURIComponent(code)}`
+            });
+        },
         showSaveModal(){
             this.$bvModal.show("modal-save-movie");
         },
@@ -332,11 +336,13 @@ export default {
                     size: this.perPage,
                     page: (this.currentPage-1)
                 }
-                const {status, data: {content, totalElements} } = await movieServices.getMovies(pagination)
+                const {status, data:{content, totalItems}} = await movieServices.getMovies(pagination)
                 if(status === 200){
                     this.movies = content
-                    this.rows = totalElements
+                    this.rows = totalItems
                 }
+/*                 const pageableObject = JSON.parse(response)
+                console.log("pageableObject>",pageableObject)  */
             } catch (error) {
                 console.log("error",error)
             }

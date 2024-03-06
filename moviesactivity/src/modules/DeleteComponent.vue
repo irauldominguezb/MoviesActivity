@@ -77,7 +77,6 @@ export default {
             this.$emit('showOverlay')
         },
         showInfo(){
-            console.log("hola")
             const Toast = this.$swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -95,14 +94,6 @@ export default {
             });
 
         }
-    },
-    watch:{
-        onDrag(oldValue, newValue){
-             
-        }
-    },
-    mounted(){
-        this.showInfo()
     }
 }
 </script>

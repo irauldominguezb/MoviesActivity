@@ -12,6 +12,7 @@ import VueRouter from 'vue-router'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import VueMoment from 'vue-moment'
+
 Vue.use(VueRouter)
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios)

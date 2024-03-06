@@ -1,5 +1,5 @@
 import  api from "../config/http-client.gateway"
-
+//import {decrypt} from "@/config/utils"
 
 const getMovies = async (pagination)=> {
     try {

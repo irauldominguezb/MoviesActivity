@@ -44,28 +44,52 @@ public class MovieController {
     }
 
     @GetMapping("/page/name/{name}")
-    Page<Movie> getPageByName(@PathVariable(name = "name") String name, Pageable pageable){
-        return service.moviePageByName(name, pageable);
+    ResponseApi<?> getPageByName(@PathVariable(name = "name") String nameC, Pageable pageable){
+        try{
+            String name = cryptService.decrypt(nameC);
+            Page<Movie> page = service.moviePageByName(name, pageable);
+            String crypt = cryptService.encrypt(objectMapper.writeValueAsString(page));
+            return new ResponseApi<>(crypt, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
+        }
     }
 
     @GetMapping("/page/director/{name}")
-    Page<Movie> getPageByDirector(@PathVariable(name = "name") String name, Pageable pageable){
-        return service.moviePageByDirector(name, pageable);
+    ResponseApi<?> getPageByDirector(@PathVariable(name = "name") String nameC, Pageable pageable){
+        try{
+            String name = cryptService.decrypt(nameC);
+            Page<Movie> page = service.moviePageByDirector(name, pageable);
+            String crypt = cryptService.encrypt(objectMapper.writeValueAsString(page));
+            return new ResponseApi<>(crypt, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
+        }
     }
 
     @GetMapping("/page/gender/{name}")
-    Page<Movie> getPageByGender(@PathVariable(name = "name") String name, Pageable pageable){
-        return service.moviePageByGender(name, pageable);
+    ResponseApi<?> getPageByGender(@PathVariable(name = "name") String nameC, Pageable pageable){
+        try{
+            String name = cryptService.decrypt(nameC);
+            Page<Movie> page = service.moviePageByGender(name, pageable);
+            String crypt = cryptService.encrypt(objectMapper.writeValueAsString(page));
+            return new ResponseApi<>(crypt, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
+        }
     }
 
     @PostMapping("/page/betweenDates")
-    Page<Movie> getPageBetweenTwoDates(@Valid @RequestBody DtoDates dates, Pageable pageable){
-        return service.moviePageBetweenTwoDates(dates.getStart(), dates.getEnd(), pageable);
+    ResponseApi<Page<Movie>> getPageBetweenTwoDates(@Valid @RequestBody DtoDates dates, Pageable pageable){
+        return new ResponseApi<>( service.moviePageBetweenTwoDates(dates.getStart(), dates.getEnd(), pageable), HttpStatus.OK);
     }
 
     @PostMapping("/page/publication")
-    Page<Movie> getPageByPublication(@Valid @RequestBody DtoDates dates, Pageable pageable){
-        return service.moviePageByPublication(dates.getStart(), pageable);
+    ResponseApi<Page<Movie>> getPageByPublication(@Valid @RequestBody DtoDates dates, Pageable pageable){
+        return new ResponseApi<>( service.moviePageByPublication(dates.getStart(), pageable), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -92,15 +116,30 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    boolean changeStatus(@PathVariable(name = "id") Long id){
-        return service.changeStatus(id);
+    ResponseApi<?> changeStatus(@PathVariable(name = "id") String idC){
+        try{
+            String id = cryptService.decrypt(idC);
+            boolean result = service.changeStatus(Long.valueOf(id));
+            Map<String, Boolean> data = new HashMap<>();
+            data.put("result", result);
+            return new ResponseApi<>(data, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    boolean deleteMovie(@PathVariable(name = "id") Long id){
-        return service.deleteMovie(id);
+    ResponseApi<?> deleteMovie(@PathVariable(name = "id") String idC){
+        try{
+            String id = cryptService.decrypt(idC);
+            boolean result = service.deleteMovie(Long.valueOf(id));
+            Map<String, Boolean> data = new HashMap<>();
+            data.put("result", result);
+            return new ResponseApi<>(data, HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseApi<>(null, HttpStatus.INTERNAL_SERVER_ERROR, true, "internal server error");
+        }
     }
-
-
-    void validMovie (@Valid DtoMovie movie){}
 }

@@ -123,10 +123,10 @@
 <script>
 
 import genreServices from "@/services/Genre"
-//import movieServices from "@/services/Movie" 
+import movieServices from "@/services/Movie" 
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
-import {encrypt} from '@/config/utils'
+import {decrypt, encrypt} from '@/config/utils'
 export default {
     name: 'SaveMovie',
     setup(){
@@ -161,8 +161,12 @@ export default {
                 if(result.isConfirmed){
                     try {
                         const {id} = this.selected;
-                        this.movie.gender.id = id;
-                        /* const {status} = await movieServices.saveMovie(this.movie)
+                        this.movie.gender = id;
+                        const objectToEncrypt = JSON.stringify(this.movie)
+                        const chiperedObject = await encrypt(objectToEncrypt)
+                        const unzipObject = await decrypt(chiperedObject)
+                        console.log("=>",unzipObject)
+                        const {status} = await movieServices.saveMovie(chiperedObject)
                         if(status === 200){
                             this.$swal.fire({
                                 title: "¡Registro exitoso!",
@@ -174,38 +178,6 @@ export default {
                             this.$emit("getMovies");
                             this.closeModalSave();
                         } 
-                        */
-                       
-/*                         const movieTest = {
-                            name: "Movidic",
-                            director: "Adam McKay",
-                            duration: "1h 30m",
-                            gender: {
-                                id: 1
-                            },
-                            publication: "12/10/2004"
-                        }
- */
-                      /*   const objectToEncrypt = JSON.stringify(movieTest) 
-                        const textCifrado = utils.encryptMessage(objectToEncrypt)
-                        console.log("cifrado =>",textCifrado);
-                        const textDescifrado = utils.decryptMessage(textCifrado)
-                        console.log("Objeto descifrado =>",JSON.parse(textDescifrado));  */
-/*                         const objectToEncrypt = JSON.stringify(movieTest)
-                        const chipperedText = utils.encryptWithSjcl(objectToEncrypt, "secretKey")
-                        console.log("cifrado =>",chipperedText); */
-                        const movieTest = {
-                            name: "Movidic",
-                            director: "Adam McKay",
-                            duration: "1h 30m",
-                            gender: {
-                                id: 1
-                            },
-                            publication: "12/10/2004"
-                        }
-                        const objectToEncrypt = JSON.stringify(movieTest)
-                        const chipperedText = await encrypt(objectToEncrypt)
-                        console.log("cifrado =>",chipperedText);
                     } catch (error) {
                         console.error(error);
                     }

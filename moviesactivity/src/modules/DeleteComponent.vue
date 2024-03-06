@@ -94,18 +94,6 @@ export default {
             });
 
         }
-<<<<<<< HEAD
-=======
-    },
-    watch:{
-      // eslint-disable-next-line no-unused-vars
-        onDrag(oldValue, newValue){
-             
-        }
-    },
-    mounted(){
-        this.showInfo()
->>>>>>> 9c104d9f74d715291c2867ee0cdbe89604904b97
     }
 }
 </script>

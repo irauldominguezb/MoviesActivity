@@ -1,6 +1,7 @@
-package com.movies.movies.model;
+package com.movies.movies.modules.gender.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.movies.movies.modules.movie.model.Movie;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

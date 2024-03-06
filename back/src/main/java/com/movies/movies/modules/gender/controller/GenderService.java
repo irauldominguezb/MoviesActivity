@@ -1,7 +1,7 @@
-package com.movies.movies.service;
+package com.movies.movies.modules.gender.controller;
 
-import com.movies.movies.model.Gender;
-import com.movies.movies.repository.GenderRepository;
+import com.movies.movies.modules.gender.model.Gender;
+import com.movies.movies.modules.gender.model.GenderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

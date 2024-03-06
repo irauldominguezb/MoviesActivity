@@ -1,7 +1,8 @@
-package com.movies.movies.service;
+package com.movies.movies.modules.movie.controller;
 
-import com.movies.movies.model.Movie;
-import com.movies.movies.repository.MovieRepository;
+import com.movies.movies.modules.movie.model.DtoMovie;
+import com.movies.movies.modules.movie.model.Movie;
+import com.movies.movies.modules.movie.model.MovieRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,11 @@ public class MovieService {
         return repository.findMoviesByPublicationOrderByPublicationDesc(publication, pageable);
     }
 
-    public Movie insertMovie (Movie movie){ return repository.save(movie);}
+    public Movie insertMovie (DtoMovie movie){
+        Movie mov = new Movie();
+        mov.setDataMovie(movie);
+        return repository.save(mov);
+    }
 
     @Transactional
     public boolean changeStatus(Long id){

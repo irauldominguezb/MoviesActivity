@@ -1,4 +1,4 @@
-package com.movies.movies.controller.dtoMovie;
+package com.movies.movies.modules.movie.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

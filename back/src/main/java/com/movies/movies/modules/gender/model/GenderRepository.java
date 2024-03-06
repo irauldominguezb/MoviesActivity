@@ -1,6 +1,5 @@
-package com.movies.movies.repository;
+package com.movies.movies.modules.gender.model;
 
-import com.movies.movies.model.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

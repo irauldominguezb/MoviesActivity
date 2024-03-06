@@ -1,6 +1,5 @@
-package com.movies.movies.repository;
+package com.movies.movies.modules.movie.model;
 
-import com.movies.movies.model.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

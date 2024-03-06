@@ -1,7 +1,6 @@
-package com.movies.movies.controller;
+package com.movies.movies.modules.gender.controller;
 
-import com.movies.movies.model.Gender;
-import com.movies.movies.service.GenderService;
+import com.movies.movies.modules.gender.model.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

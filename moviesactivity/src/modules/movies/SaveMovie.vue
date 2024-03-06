@@ -10,7 +10,7 @@
                 label-for="input-movie-title"
                 invalid-feedback="Debes ingresar un título válido."
             >
-                <label la class="mandatory-field">Título: </label>
+                <label class="mandatory-field">Título: </label>
                 <b-form-input
                     v-model="v$.movie.name.$model"
                     :state="v$.movie.name.$dirty ? !v$.movie.name.$error : null"

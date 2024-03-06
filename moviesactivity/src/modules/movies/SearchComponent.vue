@@ -10,7 +10,6 @@
                 id="search"
                 pill
                 :placeholder="'Buscar...'"
-                style="border: thin 0.4px gray;"
                 class="sticky-top"
             >
             </b-form-input>
@@ -27,12 +26,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .sticky-top{
-  position: -webkit-sticky;
     position: sticky;
     top: 0;
-    z-index: 102; 
-
 }
 </style>

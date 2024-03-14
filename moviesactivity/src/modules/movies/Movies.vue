@@ -36,7 +36,7 @@
                                 </b-dropdown>
                             </b-col>
                             <b-col cols="6">
-                                <div>
+                                <div class="header-search" :class="[{'header-search-sticky': !showElement}, {'px-5': !showElement}]">
                                     <b-input-group>
                                         <b-form-input
                                             id="search"
@@ -486,6 +486,7 @@ export default {
   transition: all ease 0.5s;
 }
 
+
 .header-search-sticky{
   background-color: rgba(0,0,0,0.1);
   padding-top: 10px;
@@ -493,8 +494,11 @@ export default {
   align-items: center;
   position: fixed;
   top: 50px;
-  z-index: 200;
-  width: 82%;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  z-index: 990;
+  width: 100%;
   border-radius: 5px;
   animation-name: appear;
   animation-duration: 1s;
